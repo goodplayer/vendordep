@@ -13,16 +13,24 @@ import (
 )
 
 type DepMain struct {
+	Project Project
 	Deps []DepItem
 }
 
-type DepItem struct {
+type Project struct {
 	GroupId        string
 	Name           string
 	ImportRootPath string
+}
+
+// groupId+name+version to find a dependency
+type DepItem struct {
+	GroupId        string
+	Name           string
+	Version        string
+	ImportRootPath string
 	VcsType        string
 	VcsUrl         string
-	Version        string
 }
 
 func main() {
