@@ -10,6 +10,21 @@ git
 
 ### 1. create vendordep.json file
 
+```
+{
+  "Deps": [
+    {
+      "GroupId": "goodplayer",
+      "Name": "vendordep",
+      "ImportRootPath": "github.com/goodplayer/vendordep",
+      "VcsType": "git",
+      "VcsUrl": "https://github.com/goodplayer/vendordep.git",
+      "Version":"81d6743ada34fcd511b5bf48281b44d8cbf4c7d6"
+    }
+  ]
+}
+```
+
 ### 2. run
 
 ```
