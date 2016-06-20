@@ -10,11 +10,13 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/goodplayer/vendordep/analyse"
 )
 
 type DepMain struct {
 	Project Project
-	Deps []DepItem
+	Deps    []DepItem
 }
 
 type Project struct {
@@ -65,7 +67,7 @@ func main() {
 	}
 
 	for _, v := range dep.Deps {
-		log.Println("processing group:", v.GroupId, "name:", v.Name, "...")
+		log.Println("================================processing group:", v.GroupId, "name:", v.Name, "...")
 		paths := strings.Split(v.ImportRootPath, "/")
 		paths = append([]string{p, "vendor"}, paths...)
 		path := filepath.Join(paths...)
@@ -79,7 +81,27 @@ func main() {
 		default:
 			log.Fatalln("unknown vcs type:", v.VcsType)
 		}
-		log.Println("processed group:", v.GroupId, "name:", v.Name)
+		log.Println("================================processed group:", v.GroupId, "name:", v.Name)
+	}
+
+	// last: print unrecognized import
+	allImports := analyse.GetImportPaths(p)
+	existImports := make([]string, len(dep.Deps)+1)
+	i := 0
+	for _, v := range dep.Deps {
+		existImports[i] = v.ImportRootPath
+		i++
+	}
+	existImports[i] = dep.Project.ImportRootPath
+	unimported := analyse.MergeUnimportedUrlPaths(allImports, existImports)
+
+	if len(unimported) > 0 {
+		fmt.Println("-------->>>> following imports are unrecognized. please check and add them to vendordep.json:")
+		for _, v := range unimported {
+			fmt.Println("\t", v)
+		}
+	} else {
+		fmt.Println("-------->>>> process dependencies finished.")
 	}
 }
 

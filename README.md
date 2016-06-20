@@ -35,3 +35,12 @@ git
 ```
 vendordep get
 ```
+
+# NOTE
+
+best practice:
+
+```
+1. DO NOT place 'vendor' in project repository, just import using tools.
+2. All imports ranges in the top same level, including inherited imports.
+```
